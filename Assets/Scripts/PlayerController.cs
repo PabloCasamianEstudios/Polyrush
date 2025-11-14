@@ -65,6 +65,9 @@ public class PlayerController : MonoBehaviour
     private void CheckGrounded()
     {
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+
+        if (isGrounded)
+            doubleJumpAvailable = true; // reset
     }
 
     // -------------------- SALTO --------------------
@@ -75,7 +78,11 @@ public class PlayerController : MonoBehaviour
             if (isGrounded)
             {
                 PerformJump();
-                doubleJumpAvailable = true;
+            }
+            else if (doubleJumpAvailable)
+            {
+                PerformJump();
+                doubleJumpAvailable = false;
             }
         }
     }
@@ -122,7 +129,10 @@ public class PlayerController : MonoBehaviour
             float mouseY = Input.GetAxis("Mouse Y") * camSensibility;
             xRotation -= mouseY;
             xRotation = Mathf.Clamp(xRotation, -5f, 45f);
-            camTPS.transform.localEulerAngles = new Vector3(xRotation, 0f, 0f);
+
+            // Smooth con Lerp
+            float smoothRotation = Mathf.Lerp(camTPS.transform.localEulerAngles.x, xRotation, Time.deltaTime * 10f);
+            camTPS.transform.localEulerAngles = new Vector3(smoothRotation, 0f, 0f);
         }
 
         // TOP DOWN no necesita rotación
