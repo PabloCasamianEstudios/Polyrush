@@ -20,25 +20,36 @@ public class PlayerController : MonoBehaviour
     private float xRotation = 0f;
 
     private Rigidbody rb;
+
+    // suelo
     private bool isGrounded;
+    private bool doubleJumpAvailable = true;
+    private bool wasGrounded;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
-        ActivateCamera(camFPS); // Empieza con FPS
+        ActivateCamera(camFPS);
 
-        Cursor.lockState = CursorLockMode.Locked; // bloquearlo centro
+        Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
 
     private void Update()
     {
+        // movimiento
         HandleMovementInput();
+
+        // salto y aire
+        CheckGrounded();
         HandleJump();
+
+        // cambio y manejo de cámara
         HandleCameraSwitch();
         HandleLook();
     }
 
+    // -------------------- MOVIMIENTO --------------------
     private void HandleMovementInput()
     {
         float moveX = Input.GetAxis("Horizontal");
@@ -50,26 +61,32 @@ public class PlayerController : MonoBehaviour
         rb.MovePosition(newPos);
     }
 
+    // -------------------- GROUND CHECK --------------------
+    private void CheckGrounded()
+    {
+        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+    }
+
+    // -------------------- SALTO --------------------
     private void HandleJump()
     {
-        isGrounded = false;
-        Collider[] colliders = Physics.OverlapSphere(groundCheck.position, groundDistance);
-        foreach (Collider col in colliders)
+        if (Input.GetButtonDown("Jump"))
         {
-            if (col.CompareTag("Ground"))
+            if (isGrounded)
             {
-                Debug.Log("suelo");
-                isGrounded = true;
-                break;
+                PerformJump();
+                doubleJumpAvailable = true;
             }
-        }
-
-        if (isGrounded && Input.GetButtonDown("Jump"))
-        {
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
     }
 
+    private void PerformJump()
+    {
+        rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+    }
+
+    // -------------------- CAMBIAR CAMARAS --------------------
     private void HandleCameraSwitch()
     {
         if (Input.GetKeyDown(KeyCode.Alpha1)) ActivateCamera(camFPS);
@@ -84,7 +101,7 @@ public class PlayerController : MonoBehaviour
         camTopDown.enabled = cam == camTopDown;
     }
 
-    // Lógica de todas las cámaras
+    // -------------------- ROTACIÓN CAMARA --------------------
     private void HandleLook()
     {
         float mouseX = Input.GetAxis("Mouse X") * camSensibility;
@@ -95,7 +112,7 @@ public class PlayerController : MonoBehaviour
         {
             float mouseY = Input.GetAxis("Mouse Y") * camSensibility;
             xRotation -= mouseY;
-            xRotation = Mathf.Clamp(xRotation, -60f, 60f); // límite vertical
+            xRotation = Mathf.Clamp(xRotation, -60f, 60f);
             camFPS.transform.localEulerAngles = new Vector3(xRotation, 0f, 0f);
         }
 
@@ -104,14 +121,10 @@ public class PlayerController : MonoBehaviour
         {
             float mouseY = Input.GetAxis("Mouse Y") * camSensibility;
             xRotation -= mouseY;
-            xRotation = Mathf.Clamp(xRotation, -5f, 45f); // límite vertical
+            xRotation = Mathf.Clamp(xRotation, -5f, 45f);
             camTPS.transform.localEulerAngles = new Vector3(xRotation, 0f, 0f);
         }
 
-        // para la top down tengo que ignorar el cursor para que no sea confuso, se mira hacia donde se mueve el player
-
-
-        // para el pablo del futuro: suavizar third y top, y sacar la top del player
-
+        // TOP DOWN no necesita rotación
     }
 }
