@@ -1,0 +1,78 @@
+# === Unity ===
+# Archivos y carpetas que Unity genera automáticamente.
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Mm]emoryCaptures/
+UserSettings/
+
+# === Sistema de paquetes (cache) ===
+# Evita subir paquetes descargados automáticamente.
+Packages/com.unity.package-manager-ui/
+
+# === Archivos de cache de compilación ===
+SysCache/
+*.booproj
+*.pidb
+*.suo
+*.user
+*.userprefs
+*.unityproj
+*.dll.mdb
+*.exe.mdb
+*.svd
+
+# === TextMesh Pro ===
+# Archivos generados que no necesitas subir.
+TextMeshPro/Fonts/*.asset
+
+# === VSCode / Rider / Visual Studio ===
+.vscode/
+.vs/
+.idea/
+*.sln
+*.csproj
+*.pidb
+*.unityproj
+*.dotsettings
+*.user
+*.rsuser
+*.suo
+*.tmp
+
+# === Archivos del sistema operativo ===
+.DS_Store
+Thumbs.db
+
+# === Crash Reports y StackTraces ===
+*.stacktrace
+
+# === Builds exportados ===
+*.apk
+*.aab
+*.xcodeproj/
+*.xcworkspace/
+*.ipa
+*.app
+
+# === Unity Cloud / Collaboration ===
+Collab/
+.ute/
+
+# === Archivos auto-generados por plugins ===
+*.meta~
+*.obj
+*.exe
+*.pdb
+*.mdb
+*.mp4
+*.zip
+*.rar
+
+# === Archivos de cache de iluminación ===
+LightingData.asset
+*/Lightmap-*
+*/ReflectionProbe-*
