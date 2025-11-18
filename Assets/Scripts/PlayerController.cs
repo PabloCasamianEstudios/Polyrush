@@ -5,6 +5,7 @@ public class PlayerController : MonoBehaviour
     [Header("Movement Settings")]
     public float moveSpeed = 6f;
     public float jumpForce = 5f;
+    public float friction = 1f;
 
     [Header("Ground Check")]
     public Transform groundCheck;
@@ -69,6 +70,7 @@ public class PlayerController : MonoBehaviour
         // Dash
         HandleDash();
     }
+    
 
     // -------------------- MOVIMIENTO --------------------
 
@@ -89,7 +91,6 @@ public class PlayerController : MonoBehaviour
             right.Normalize();
 
             move = forward * moveZ + right * moveX;
-
 
             if (move.magnitude > 0.1f) // Rotar personaje hacia la dirección de movimiento
             {
