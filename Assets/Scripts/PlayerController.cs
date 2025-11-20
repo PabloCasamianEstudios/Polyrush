@@ -31,6 +31,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Player Control")]
     public bool canMove = false;
+    public bool canLook = true;
 
     private Rigidbody rb;
 
@@ -121,11 +122,6 @@ public class PlayerController : MonoBehaviour
 
     }
 
-
-    public void SetMovementEnabled(bool isEnabled)
-    {
-        canMove = isEnabled;
-    }
     // -------------------- GROUND CHECK --------------------
     private void CheckGrounded()
     {
@@ -272,9 +268,9 @@ public class PlayerController : MonoBehaviour
     // -------------------- ROTACIÓN CAMARA --------------------
     private void HandleLook()
     {
+        if (!canLook) return;
         // TOP DOWN no necesita mover la cam
-        if (camTopDown.enabled)
-            return;
+        if (camTopDown.enabled) return;
 
         float mouseX = Input.GetAxis("Mouse X") * camSensibility;
         float mouseY = Input.GetAxis("Mouse Y") * camSensibility;
@@ -298,6 +294,31 @@ public class PlayerController : MonoBehaviour
             Quaternion targetRotation = Quaternion.Euler(xRotation, 0f, 0f);
             camTPS.transform.localRotation = Quaternion.Slerp(camTPS.transform.localRotation, targetRotation, Time.deltaTime * 10f);
         }
+    }
+
+
+    // -------------------- EXPLOSION JUMP --------------------
+    public void ApplyExplosionForce(Vector3 explosionPosition, float force, float radius)
+    {
+        Vector3 dir = rb.position - explosionPosition;
+        float distance = dir.magnitude;
+
+        if (distance > radius) return;
+
+        float effect = 1f - (distance / radius);
+        rb.AddForce(dir.normalized * force * effect, ForceMode.Impulse);
+    }
+
+    // -------------------- CONTROL --------------------
+    
+    public void SetMovementEnabled(bool isEnabled)
+    {
+        canMove = isEnabled;
+    }
+
+    public void SetLookEnabled(bool isEnabled)
+    {
+        canLook = isEnabled;
     }
 
 }

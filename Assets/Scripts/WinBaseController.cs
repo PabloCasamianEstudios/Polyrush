@@ -7,8 +7,16 @@ public class WinBaseController : MonoBehaviour
     public Color activeColor = Color.green;
     public Color inactiveColor = Color.red;
 
+    private GameManager gameManager;
+
     private void Start()
     {
+        GameObject managerObject = GameObject.FindGameObjectWithTag("GameManager"); 
+        if (managerObject != null)
+        {
+            gameManager = managerObject.GetComponent<GameManager>();
+        }
+        
         UpdateColor();
     }
 
@@ -30,7 +38,12 @@ public class WinBaseController : MonoBehaviour
 
         if (other.CompareTag("Player"))
         {
-            Debug.Log("TOCÓ EL PLAYER Y LA VICTORIA ESTÁ ACTIVADA");
+            Debug.Log("Nivel completado!");
+            if (gameManager != null)
+            {
+                gameManager.LevelCompleted();
+                SetVictoryActive(false); 
+            }
         }
     }
 }

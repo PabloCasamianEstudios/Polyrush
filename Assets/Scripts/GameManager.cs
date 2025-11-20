@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     public TMP_Text countdownText;
     public TMP_Text runTimerText;
     public GameObject crosshair;
+    public TMP_Text finalTimeText;
 
     private float runTimer = 0f;
 
@@ -30,6 +31,7 @@ public class GameManager : MonoBehaviour
     {
         StartCoroutine(StartCountdown()); // el contador 
         crosshair.SetActive(false);
+        finalTimeText.gameObject.SetActive(false);
     }
     private void Update()
     {
@@ -84,6 +86,31 @@ public class GameManager : MonoBehaviour
     public void RetryLevel()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    // -------------------- FIN DE JUEGO --------------------
+    public void LevelCompleted()
+    {
+        if (!gameStarted) return;
+
+        //  Detener crono
+        gameStarted = false; 
+        runTimerText.gameObject.SetActive(false);
+        crosshair.SetActive(false);
+        
+        // Desactivar player
+        if (player != null)
+        {
+            player.SetMovementEnabled(false);
+            player.SetLookEnabled(false);
+        }
+
+        // Mostrar el tiempo
+        finalTimeText.gameObject.SetActive(true);
+        finalTimeText.text =  FormatTime(runTimer); 
+        
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
 }

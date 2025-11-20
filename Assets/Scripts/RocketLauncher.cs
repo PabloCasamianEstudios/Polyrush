@@ -8,24 +8,27 @@ public class RocketLauncher : MonoBehaviour
 
     public void Shoot()
     {
-        // Ray desde el centro de la pantalla
-        Ray ray = playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f, 0f));
+        Ray ray = playerCamera.ScreenPointToRay(
+            new Vector3(Screen.width / 2f, Screen.height / 2f, 0f)
+        );
+
         Vector3 targetPoint;
 
-        if (Physics.Raycast(ray, out RaycastHit hit))
+        // Raycast ignorando al propio jugador
+        if (Physics.Raycast(ray, out RaycastHit hit, 2000f, ~LayerMask.GetMask("Player")))
         {
             targetPoint = hit.point;
         }
         else
         {
-            targetPoint = ray.GetPoint(1000f);
+            targetPoint = ray.GetPoint(2000f);
         }
 
-        Vector3 direction = (targetPoint - firePoint.position).normalized;
+        // DIRECCIÓN SOLO BASADA EN LA CÁMARA
+        Vector3 direction = (targetPoint - playerCamera.transform.position).normalized;
 
-        GameObject missile = Instantiate(missilePrefab, firePoint.position, Quaternion.identity);
+        GameObject missile = Instantiate(missilePrefab, firePoint.position, Quaternion.LookRotation(direction));
 
-        // Inicializa dirección del misil
         missile.GetComponent<Missile>().Init(direction);
     }
 
