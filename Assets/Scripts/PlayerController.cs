@@ -29,12 +29,18 @@ public class PlayerController : MonoBehaviour
     private TrailRenderer dashTrail;
     public Material trailMaterial;
 
+    [Header("Player Control")]
+    public bool canMove = false;
+
     private Rigidbody rb;
 
     // suelo
     private bool isGrounded;
     private bool doubleJumpAvailable = true;
     private bool wasGrounded;
+
+    [Header("Rocket Launcher")]
+    public RocketLauncher rocketLauncher;
 
 
     private void Start()
@@ -56,6 +62,12 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        // cambio y manejo de cámara
+        HandleCameraSwitch();
+        HandleLook();
+
+        if (!canMove) return;
+
         // movimiento
         HandleMovementInput();
 
@@ -63,14 +75,15 @@ public class PlayerController : MonoBehaviour
         CheckGrounded();
         HandleJump();
 
-        // cambio y manejo de cámara
-        HandleCameraSwitch();
-        HandleLook();
-
         // Dash
         HandleDash();
+
+        if (Input.GetButtonDown("Fire1"))
+        {
+            rocketLauncher.Shoot();
+        }
     }
-    
+
 
     // -------------------- MOVIMIENTO --------------------
 
@@ -108,6 +121,11 @@ public class PlayerController : MonoBehaviour
 
     }
 
+
+    public void SetMovementEnabled(bool isEnabled)
+    {
+        canMove = isEnabled;
+    }
     // -------------------- GROUND CHECK --------------------
     private void CheckGrounded()
     {
@@ -256,32 +274,30 @@ public class PlayerController : MonoBehaviour
     {
         // TOP DOWN no necesita mover la cam
         if (camTopDown.enabled)
-        {
             return;
-        }
 
         float mouseX = Input.GetAxis("Mouse X") * camSensibility;
+        float mouseY = Input.GetAxis("Mouse Y") * camSensibility;
+
+        // Rotación horizontal del jugador
         transform.Rotate(Vector3.up * mouseX);
 
-        // FIRST PERSON
+        // FIRST PERSON y THIRD PERSON - Rotación vertical de la cámara
         if (camFPS.enabled)
         {
-            float mouseY = Input.GetAxis("Mouse Y") * camSensibility;
             xRotation -= mouseY;
             xRotation = Mathf.Clamp(xRotation, -60f, 60f);
             camFPS.transform.localEulerAngles = new Vector3(xRotation, 0f, 0f);
         }
 
-        // THIRD PERSON
         if (camTPS.enabled)
         {
-            float mouseY = Input.GetAxis("Mouse Y") * camSensibility;
             xRotation -= mouseY;
             xRotation = Mathf.Clamp(xRotation, -5f, 45f);
 
             Quaternion targetRotation = Quaternion.Euler(xRotation, 0f, 0f);
             camTPS.transform.localRotation = Quaternion.Slerp(camTPS.transform.localRotation, targetRotation, Time.deltaTime * 10f);
         }
-
     }
+
 }
