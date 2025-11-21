@@ -17,7 +17,17 @@ public class GameManager : MonoBehaviour
     public TMP_Text countdownText;
     public TMP_Text runTimerText;
     public GameObject crosshair;
+
+    [Header("End UI")]
     public TMP_Text finalTimeText;
+    public GameObject finalBackground;
+    public GameObject nextLevelButton;
+
+    [Header("Pause Menu UI")]
+    public GameObject pauseMenu;
+    private bool isPaused = false;
+
+
 
     private float runTimer = 0f;
 
@@ -32,6 +42,11 @@ public class GameManager : MonoBehaviour
         StartCoroutine(StartCountdown()); // el contador 
         crosshair.SetActive(false);
         finalTimeText.gameObject.SetActive(false);
+        finalBackground.SetActive(false);
+        nextLevelButton.SetActive(false);
+        pauseMenu.SetActive(false);
+
+
     }
     private void Update()
     {
@@ -39,6 +54,15 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
         {
             RetryLevel();
+        }
+
+        // Pause
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            if (isPaused)
+                ResumeGame();
+            else
+                PauseGame();
         }
 
         if (gameStarted)
@@ -85,6 +109,7 @@ public class GameManager : MonoBehaviour
     // -------------------- REPETIR --------------------
     public void RetryLevel()
     {
+        Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
@@ -94,10 +119,10 @@ public class GameManager : MonoBehaviour
         if (!gameStarted) return;
 
         //  Detener crono
-        gameStarted = false; 
+        gameStarted = false;
         runTimerText.gameObject.SetActive(false);
         crosshair.SetActive(false);
-        
+
         // Desactivar player
         if (player != null)
         {
@@ -105,12 +130,88 @@ public class GameManager : MonoBehaviour
             player.SetLookEnabled(false);
         }
 
-        // Mostrar el tiempo
+        // Mostrar final
         finalTimeText.gameObject.SetActive(true);
-        finalTimeText.text =  FormatTime(runTimer); 
-        
+        finalTimeText.text = FormatTime(runTimer);
+        finalBackground.SetActive(true);
+        nextLevelButton.SetActive(true);
+
+
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
+
+
+    // -------------------- NEXT --------------------
+
+    public void NextLevel()
+    {
+        string[] levels = new string[]
+        {
+        "SampleScene",
+        "Level1",
+        "Level2",
+        "Level3",
+        };
+
+        string current = SceneManager.GetActiveScene().name;
+        int index = System.Array.IndexOf(levels, current);
+
+        // Si hay siguiente nivel
+        if (index + 1 < levels.Length)
+        {
+            SceneManager.LoadScene(levels[index + 1]);
+        }
+        else
+        {
+            Debug.Log("No hay más niveles. Fin del juego.");
+        }
+    }
+
+    // -------------------- PAUSE MENU --------------------
+    public void PauseGame()
+    {
+        isPaused = true;
+
+        pauseMenu.SetActive(true);
+
+        Time.timeScale = 0f;
+
+        if (player != null)
+        {
+            player.SetMovementEnabled(false);
+            player.SetLookEnabled(false);
+        }
+
+        finalBackground.SetActive(true);
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
+
+    public void ResumeGame()
+    {
+        isPaused = false;
+
+        pauseMenu.SetActive(false);
+        finalBackground.SetActive(false);
+
+        Time.timeScale = 1f;
+
+        if (player != null)
+        {
+            player.SetMovementEnabled(true);
+            player.SetLookEnabled(true);
+        }
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
+
+    public void ExitGame()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("MainMenu");
+    }
+
 
 }

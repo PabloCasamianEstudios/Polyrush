@@ -38,7 +38,6 @@ public class WinBaseController : MonoBehaviour
 
         if (other.CompareTag("Player"))
         {
-            Debug.Log("Nivel completado!");
             if (gameManager != null)
             {
                 gameManager.LevelCompleted();
