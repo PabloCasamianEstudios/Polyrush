@@ -43,6 +43,9 @@ public class PlayerController : MonoBehaviour
     [Header("Rocket Launcher")]
     public RocketLauncher rocketLauncher;
 
+    [Header("Points")]
+    public int points = 0;
+
 
     private void Start()
     {
@@ -310,7 +313,7 @@ public class PlayerController : MonoBehaviour
     }
 
     // -------------------- CONTROL --------------------
-    
+
     public void SetMovementEnabled(bool isEnabled)
     {
         canMove = isEnabled;
@@ -319,6 +322,13 @@ public class PlayerController : MonoBehaviour
     public void SetLookEnabled(bool isEnabled)
     {
         canLook = isEnabled;
+    }
+
+    // -------------------- POINTS --------------------
+    public void AddPoints(int amount)
+    {
+        points += amount;
+        Debug.Log("Monedas: " + points);
     }
 
 }

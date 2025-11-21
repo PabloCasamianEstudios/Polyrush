@@ -34,18 +34,39 @@ public class GameManager : MonoBehaviour
     [Header("Player")]
     public PlayerController player;
 
+    [Header("Win Platform")]
+    public WinBaseController winPlatform;
+
+    // Enemigos
+    private GameObject[] enemies;
+
 
 
 
     private void Start()
     {
-        StartCoroutine(StartCountdown()); // el contador 
+        enemies = GameObject.FindGameObjectsWithTag("Enemy");
+
+        StartCoroutine(StartCountdown());
         crosshair.SetActive(false);
         finalTimeText.gameObject.SetActive(false);
         finalBackground.SetActive(false);
         nextLevelButton.SetActive(false);
         pauseMenu.SetActive(false);
 
+
+    // win condition
+        if (winPlatform != null)
+        {
+            if (enemies.Length == 0)
+            {
+                winPlatform.SetVictoryActive(true);
+            }
+            else
+            {
+                winPlatform.SetVictoryActive(false);
+            }
+        }
 
     }
     private void Update()
@@ -71,6 +92,16 @@ public class GameManager : MonoBehaviour
             runTimerText.text = FormatTime(runTimer);
         }
 
+    }
+
+    private void LateUpdate()
+    {
+        if (!gameStarted) return;
+
+        if (enemies.Length > 0 && AllEnemiesDefeated())
+        {
+            ActivateWinPlatform();
+        }
     }
 
     // -------------------- CONTADOR --------------------
@@ -214,4 +245,21 @@ public class GameManager : MonoBehaviour
     }
 
 
+    // -------------------- ENEMIES --------------------
+    private bool AllEnemiesDefeated()
+    {
+        foreach (GameObject enemy in enemies)
+        {
+            if (enemy != null) return false;
+        }
+        return true;
+    }
+
+    private void ActivateWinPlatform()
+    {
+        if (winPlatform != null)
+        {
+            winPlatform.SetVictoryActive(true);
+        }
+    }
 }

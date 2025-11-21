@@ -268,7 +268,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc79d9e671229b84189da0308e84f824, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  victoryActive: 1
+  victoryActive: 0
   platformRenderer: {fileID: 1203744398360393155}
   activeColor: {r: 0, g: 1, b: 0, a: 1}
   inactiveColor: {r: 1, g: 0, b: 0, a: 1}
