@@ -42,6 +42,9 @@ public class PlayerController : MonoBehaviour
 
     [Header("Rocket Launcher")]
     public RocketLauncher rocketLauncher;
+    public bool startsWithRocket = false;
+    public bool hasRocketLauncher = false;
+
 
     [Header("Points")]
     public int points = 0;
@@ -52,6 +55,17 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
 
         rb.freezeRotation = true;
+        
+         if (startsWithRocket)
+        {
+            hasRocketLauncher = true;
+            rocketLauncher.gameObject.SetActive(true);
+        }
+        else
+        {
+            hasRocketLauncher = false;
+            rocketLauncher.gameObject.SetActive(false);
+        }
 
         // el trail del dash
         SetupDashTrail();
@@ -82,7 +96,7 @@ public class PlayerController : MonoBehaviour
         // Dash
         HandleDash();
 
-        if (Input.GetButtonDown("Fire1"))
+        if (hasRocketLauncher && Input.GetButtonDown("Fire1"))
         {
             rocketLauncher.Shoot();
         }
