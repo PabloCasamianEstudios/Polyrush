@@ -49,22 +49,36 @@ public class PlayerController : MonoBehaviour
     [Header("Points")]
     public int points = 0;
 
+    [Header("Walking Particles")]
+    public ParticleSystem walkingPowder;
+    public float walkingThreshold = 0.1f;
+
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
 
         rb.freezeRotation = true;
-        
-         if (startsWithRocket)
+
+        if (startsWithRocket)
         {
             hasRocketLauncher = true;
-            rocketLauncher.gameObject.SetActive(true);
+            if (rocketLauncher != null)
+            {
+                rocketLauncher.gameObject.SetActive(true);
+            }
+            else
+            {
+                hasRocketLauncher = false;
+            }
         }
         else
         {
             hasRocketLauncher = false;
-            rocketLauncher.gameObject.SetActive(false);
+            if (rocketLauncher != null)
+            {
+                rocketLauncher.gameObject.SetActive(false);
+            }
         }
 
         // el trail del dash
@@ -136,6 +150,21 @@ public class PlayerController : MonoBehaviour
 
         Vector3 newPos = rb.position + move * moveSpeed * Time.deltaTime;
         rb.MovePosition(newPos);
+
+        // polvo
+        if (walkingPowder != null)
+        {
+            if (move.magnitude > walkingThreshold && isGrounded)
+            {
+                if (!walkingPowder.isPlaying)
+                    walkingPowder.Play();
+            }
+            else
+            {
+                if (walkingPowder.isPlaying)
+                    walkingPowder.Stop();
+            }
+        }
 
     }
 

@@ -272,3 +272,4 @@ MonoBehaviour:
   platformRenderer: {fileID: 1203744398360393155}
   activeColor: {r: 0, g: 1, b: 0, a: 1}
   inactiveColor: {r: 1, g: 0, b: 0, a: 1}
+  winParticles: {fileID: 7276764443248859406, guid: 70a568d2d6722da418b0ee39ae5a2c7e, type: 3}

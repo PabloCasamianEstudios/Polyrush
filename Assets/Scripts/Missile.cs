@@ -12,6 +12,10 @@ public class Missile : MonoBehaviour
     private Vector3 direction;
     private Vector3 startPosition;
 
+
+    [Header("Explosion Particles")]
+    public GameObject missileExplosion;
+
     public void Init(Vector3 dir)
     {
         direction = dir.normalized;

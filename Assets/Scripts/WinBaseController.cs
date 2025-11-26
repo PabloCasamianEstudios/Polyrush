@@ -9,14 +9,17 @@ public class WinBaseController : MonoBehaviour
 
     private GameManager gameManager;
 
+    [Header("Particles")]
+    public GameObject winParticles;
+
     private void Start()
     {
-        GameObject managerObject = GameObject.FindGameObjectWithTag("GameManager"); 
+        GameObject managerObject = GameObject.FindGameObjectWithTag("GameManager");
         if (managerObject != null)
         {
             gameManager = managerObject.GetComponent<GameManager>();
         }
-        
+
         UpdateColor();
     }
 
@@ -41,7 +44,30 @@ public class WinBaseController : MonoBehaviour
             if (gameManager != null)
             {
                 gameManager.LevelCompleted();
-                SetVictoryActive(false); 
+                SetVictoryActive(false);
+
+                if (winParticles != null)
+                {
+                    Vector3 spawnPosition = other.transform.position + Vector3.up * 1f;
+                    GameObject particlesInstance = Instantiate(winParticles, spawnPosition, Quaternion.identity);
+
+                    ParticleSystem ps = particlesInstance.GetComponent<ParticleSystem>();
+                    if (ps != null)
+                    {
+                        ps.Play();
+                        Destroy(particlesInstance, ps.main.duration + ps.main.startLifetime.constantMax);
+                    }
+                    else
+                    {
+                        ps = particlesInstance.GetComponentInChildren<ParticleSystem>();
+                        if (ps != null)
+                        {
+                            ps.Play();
+                            Destroy(particlesInstance, ps.main.duration + ps.main.startLifetime.constantMax);
+                        }
+                    }
+                }
+                GetComponent<Collider>().enabled = false;
             }
         }
     }
