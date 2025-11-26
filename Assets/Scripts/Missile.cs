@@ -47,6 +47,12 @@ public class Missile : MonoBehaviour
 
     void Explode()
     {
+        if (missileExplosion != null)
+        {
+            GameObject explosion = Instantiate(missileExplosion, transform.position, Quaternion.identity);
+            Destroy(explosion, 1f);
+        }
+
         // Rocket Jump
         PlayerController player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         if (player != null)
