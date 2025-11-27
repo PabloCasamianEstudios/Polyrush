@@ -55,7 +55,7 @@ public class GameManager : MonoBehaviour
         pauseMenu.SetActive(false);
 
 
-    // win condition
+        // win condition
         if (winPlatform != null)
         {
             if (enemies.Length == 0)
@@ -179,7 +179,6 @@ public class GameManager : MonoBehaviour
     {
         string[] levels = new string[]
         {
-        "SampleScene",
         "Level1",
         "Level2",
         "Level3",

@@ -121,35 +121,47 @@ public class PlayerController : MonoBehaviour
 
     private void HandleMovementInput()
     {
+
+        if (isDashing) return;
+
         float moveX = Input.GetAxis("Horizontal");
         float moveZ = Input.GetAxis("Vertical");
 
         Vector3 move = transform.right * moveX + transform.forward * moveZ;
-        if (camTopDown.enabled) // TopDown - mov relativo a la cámara
+
+        if (camTopDown.enabled)
         {
             Vector3 forward = camTopDown.transform.forward;
             Vector3 right = camTopDown.transform.right;
 
-            forward.y = 0f;
-            right.y = 0f;
+            forward.y = 0;
+            right.y = 0;
+
             forward.Normalize();
             right.Normalize();
 
             move = forward * moveZ + right * moveX;
 
-            if (move.magnitude > 0.1f) // Rotar personaje hacia la dirección de movimiento
+            if (move.magnitude > 0.1f)
             {
                 Quaternion targetRotation = Quaternion.LookRotation(move.normalized);
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10f);
             }
         }
-        else // FPS Y TPS - mov relativo al player
-        {
-            move = transform.right * moveX + transform.forward * moveZ;
-        }
 
-        Vector3 newPos = rb.position + move * moveSpeed * Time.deltaTime;
-        rb.MovePosition(newPos);
+        Vector3 currentVel = rb.linearVelocity;
+
+        Vector3 desiredVel = move.normalized * moveSpeed;
+
+        float controlFactor = isGrounded ? 1f : 0.4f;
+
+        Vector3 newVel = new Vector3(
+            Mathf.Lerp(currentVel.x, desiredVel.x, controlFactor),
+            currentVel.y,
+            Mathf.Lerp(currentVel.z, desiredVel.z, controlFactor)
+        );
+
+        rb.linearVelocity = newVel;
 
         // polvo
         if (walkingPowder != null)
@@ -165,8 +177,8 @@ public class PlayerController : MonoBehaviour
                     walkingPowder.Stop();
             }
         }
-
     }
+
 
     // -------------------- GROUND CHECK --------------------
     private void CheckGrounded()
