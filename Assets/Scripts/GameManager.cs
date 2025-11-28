@@ -179,9 +179,7 @@ public class GameManager : MonoBehaviour
     {
         string[] levels = new string[]
         {
-        "Level1",
-        "Level2",
-        "Level3",
+        "Crystal1",
         };
 
         string current = SceneManager.GetActiveScene().name;

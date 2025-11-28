@@ -7,7 +7,7 @@ public class GameMainMenuManager : MonoBehaviour
 
     public void goPlay()
     {
-        SceneManager.LoadScene("Level1");
+        SceneManager.LoadScene("Crystal1");
     }
 
     public void quitGame()
