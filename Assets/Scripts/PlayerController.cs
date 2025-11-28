@@ -11,6 +11,10 @@ public class PlayerController : MonoBehaviour
     public Transform groundCheck;
     public float groundDistance = 0.2f;
     public LayerMask groundMask;
+    public float stepOffset = 0.3f;
+    private bool isGrounded;
+    private float coyoteTime = 0.1f;
+    private float lastGroundedTime;
 
     [Header("Cameras")]
     public Camera camFPS;
@@ -35,8 +39,6 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody rb;
 
-    // suelo
-    private bool isGrounded;
     private bool doubleJumpAvailable = true;
     private bool wasGrounded;
 
@@ -183,27 +185,29 @@ public class PlayerController : MonoBehaviour
     // -------------------- GROUND CHECK --------------------
     private void CheckGrounded()
     {
-        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+        isGrounded = false;
 
-        if (isGrounded && rb.linearVelocity.y <= 0) // no deslizarse al tocar suelo de nuevo
+        // Raycast central
+        if (Physics.Raycast(groundCheck.position, Vector3.down, out RaycastHit hit, groundDistance, groundMask))
         {
-            Vector3 horizontalVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
-            if (horizontalVelocity.magnitude > moveSpeed)
+            // Solo consideramos como suelo si la superficie es relativamente horizontal
+            if (Vector3.Angle(hit.normal, Vector3.up) < 60f)
             {
-                horizontalVelocity = horizontalVelocity.normalized * moveSpeed;
-                rb.linearVelocity = new Vector3(horizontalVelocity.x, rb.linearVelocity.y, horizontalVelocity.z);
+                isGrounded = true;
+                lastGroundedTime = Time.time;
+                doubleJumpAvailable = true;
             }
-
-            doubleJumpAvailable = true; // reset
         }
     }
+
+
 
     // -------------------- SALTO --------------------
     private void HandleJump()
     {
         if (Input.GetButtonDown("Jump"))
         {
-            if (isGrounded)
+            if (isGrounded || Time.time - lastGroundedTime <= coyoteTime)
             {
                 PerformJump();
             }
