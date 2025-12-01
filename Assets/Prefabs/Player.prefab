@@ -704,7 +704,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 80
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!136 &4115224880999646910
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -748,6 +748,7 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 64
+  stepOffset: 0.3
   camFPS: {fileID: 9072063013711266960}
   camTPS: {fileID: 2993576644410893537}
   camTopDown: {fileID: 0}
@@ -757,7 +758,13 @@ MonoBehaviour:
   dashCooldown: 1
   trailMaterial: {fileID: 2100000, guid: d8a481c69cb0a8a4c8ce6dccbc7c790f, type: 2}
   canMove: 0
+  canLook: 1
   rocketLauncher: {fileID: 0}
+  startsWithRocket: 0
+  hasRocketLauncher: 0
+  points: 0
+  walkingPowder: {fileID: 0}
+  walkingThreshold: 0.1
 --- !u!1 &7295101476671394267
 GameObject:
   m_ObjectHideFlags: 0

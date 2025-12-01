@@ -37,11 +37,26 @@ public class GameManager : MonoBehaviour
     [Header("Win Platform")]
     public WinBaseController winPlatform;
 
+    [Header("Music")]
+    public AudioClip backgroundMusic;
+    private AudioSource musicSource;
+    private static GameManager instance;
+
     // Enemigos
     private GameObject[] enemies;
 
 
+    // private void Awake()
+    // {
+    //     if (instance != null && instance != this)
+    //     {
+    //         Destroy(gameObject);
+    //         return;
+    //     }
 
+    //     instance = this;
+    //     DontDestroyOnLoad(gameObject);
+    // }
 
     private void Start()
     {
@@ -67,6 +82,15 @@ public class GameManager : MonoBehaviour
                 winPlatform.SetVictoryActive(false);
             }
         }
+
+
+        // --- MUSIC SETUP ---
+        musicSource = gameObject.AddComponent<AudioSource>();
+        musicSource.clip = backgroundMusic;
+        musicSource.loop = true;
+        musicSource.volume = 0.3f;
+        musicSource.spatialBlend = 0f;
+        musicSource.Play();
 
     }
     private void Update()

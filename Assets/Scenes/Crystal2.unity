@@ -1746,6 +1746,7 @@ MonoBehaviour:
   pauseMenu: {fileID: 1385579467}
   player: {fileID: 1532615939}
   winPlatform: {fileID: 1023167484}
+  backgroundMusic: {fileID: 8300000, guid: 3935c0db56e04fe41b151af48ecbc0d3, type: 3}
 --- !u!4 &229348959
 Transform:
   m_ObjectHideFlags: 0

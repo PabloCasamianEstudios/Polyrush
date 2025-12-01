@@ -57,6 +57,7 @@ MonoBehaviour:
   explosionForce: 5
   explosionRadius: 6
   missileExplosion: {fileID: 7391438102608824609, guid: 54052ccc4167f2e4f895b325e17865e9, type: 3}
+  explosionSFX: {fileID: 8300000, guid: 03f5a7d43c051554d81482043f98027a, type: 3}
 --- !u!136 &2173119620220236005
 CapsuleCollider:
   m_ObjectHideFlags: 0
