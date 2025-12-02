@@ -20,6 +20,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Sand1.unity
     guid: 3e12f5c789d6ffe40806e7ddab902854
+  - enabled: 1
+    path: Assets/Scenes/Sand2.unity
+    guid: 04dd95aa4c090f642885970fa84aacee
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

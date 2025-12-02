@@ -55,12 +55,26 @@ public class PlayerController : MonoBehaviour
     public ParticleSystem walkingPowder;
     public float walkingThreshold = 0.1f;
 
+    [Header("Audio")]
+    public AudioClip impactSound;
+    public float impactVolume = 1f;
+
+    private AudioSource audioSource;
+
+
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
 
         rb.freezeRotation = true;
+
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+
 
         if (startsWithRocket)
         {
@@ -390,4 +404,13 @@ public class PlayerController : MonoBehaviour
         Debug.Log("Monedas: " + points);
     }
 
+    // -------------------- Collision --------------------
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (impactSound != null)
+        {
+            audioSource.PlayOneShot(impactSound, impactVolume);
+        }
+    }
 }
