@@ -16,12 +16,22 @@ public class Missile : MonoBehaviour
     [Header("Explosion Particles")]
     public GameObject missileExplosion;
 
+    [Header("Audio")]
+    public AudioClip explosionSFX;
+    private AudioSource audioSource;
+
     public void Init(Vector3 dir)
     {
         direction = dir.normalized;
         transform.rotation = Quaternion.LookRotation(direction);
 
         startPosition = transform.position;
+
+        // Crear y configurar audio source si no existe
+        audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.playOnAwake = false;
+        audioSource.spatialBlend = 1f;
+        audioSource.volume = 1f;
     }
 
     void Update()
@@ -47,6 +57,14 @@ public class Missile : MonoBehaviour
 
     void Explode()
     {
+        if (explosionSFX != null)
+        {
+            for (int i = 0; i < 3; i++)
+                {
+                    AudioSource.PlayClipAtPoint(explosionSFX, transform.position);
+                }
+        }
+
         if (missileExplosion != null)
         {
             GameObject explosion = Instantiate(missileExplosion, transform.position, Quaternion.identity);
