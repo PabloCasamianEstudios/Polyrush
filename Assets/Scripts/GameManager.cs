@@ -206,7 +206,10 @@ public class GameManager : MonoBehaviour
         "Crystal1",
         "Crystal2",
         "Crystal3",
-        "Sand1"
+        "Sand1",
+        "Sand2",
+        "Sand3",
+        "MainMenu"
         };
 
         string current = SceneManager.GetActiveScene().name;
